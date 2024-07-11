@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx"
-import { arquivistico, bibliografico, museologico } from "./schema"
+import { arquivistico, bibliografico, museologico } from "./schema.mjs"
 
 /**
  * Transforma um texto em uma string slug
