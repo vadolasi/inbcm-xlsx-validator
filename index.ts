@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx"
-import { arquivistico, bibliografico, museologico } from "./schema"
+import { arquivistico, bibliografico, museologico } from "./schema.js"
 
 /**
  * Transforma um texto em uma string slug
@@ -74,7 +74,7 @@ function validateRows(
  * @param file - Arquivo a ser lido
  * @returns Conteúdo do arquivo como ArrayBuffer
  */
-async function readFile(file: File): Promise<ArrayBuffer> {
+export async function readFile(file: File): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(reader.result as ArrayBuffer)
@@ -91,12 +91,11 @@ async function readFile(file: File): Promise<ArrayBuffer> {
  * @returns Objeto com a lista de objetos e a lista de erros
  */
 async function parseExcelFile(
-  file: File,
+  buffer: Buffer,
   headersSchema: string[],
   requiredFields: string[]
 ): Promise<{ data: { [key: string]: string }[]; errors: string[] }> {
-  const buffer = await readFile(file)
-  const workbook = XLSX.read(buffer, { type: "array" })
+  const workbook = XLSX.read(buffer, { type: "buffer" })
   const sheetName = workbook.SheetNames[0]
   const worksheet = workbook.Sheets[sheetName]
   const lines = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as string[][]
@@ -130,9 +129,9 @@ async function parseExcelFile(
  * @returns Objeto com a lista de objetos e a lista de erros
  */
 export async function validate_museologico(
-  file: File
+  buffer: Buffer
 ): Promise<{ data: { [key: string]: string }[]; errors: string[] }> {
-  return parseExcelFile(file, Object.keys(museologico.fields), museologico.required)
+  return parseExcelFile(buffer, Object.keys(museologico.fields), museologico.required)
 }
 
 /**
@@ -141,9 +140,9 @@ export async function validate_museologico(
  * @returns Objeto com a lista de objetos e a lista de erros
  */
 export async function validate_bibliografico(
-  file: File
+  buffer: Buffer
 ): Promise<{ data: { [key: string]: string }[]; errors: string[] }> {
-  return parseExcelFile(file, Object.keys(bibliografico.fields), bibliografico.required)
+  return parseExcelFile(buffer, Object.keys(bibliografico.fields), bibliografico.required)
 }
 
 /**
@@ -152,7 +151,8 @@ export async function validate_bibliografico(
  * @returns Objeto com a lista de objetos e a lista de erros
  */
 export async function validate_arquivistico(
-  file: File
+  buffer: Buffer
 ): Promise<{ data: { [key: string]: string }[]; errors: string[] }> {
-  return parseExcelFile(file, Object.keys(arquivistico.fields), arquivistico.required)
+  return parseExcelFile(buffer, Object.keys(arquivistico.fields), arquivistico.required)
 }
+
