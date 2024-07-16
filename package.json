@@ -2,8 +2,8 @@
   "name": "inbcm-xlsx-validator",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "files": ["dist/**"],
+  "main": "dist",
+  "files": ["dist/**", "*.ts"],
   "scripts": {
     "build": "sucrase --transforms typescript,imports -d dist ./src",
     "postinstall": "pnpm run build"
