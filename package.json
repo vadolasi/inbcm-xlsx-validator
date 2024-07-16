@@ -2,7 +2,7 @@
   "name": "inbcm-xlsx-validator",
   "version": "1.0.0",
   "description": "",
-  "main": "dist",
+  "main": "dist/",
   "scripts": {
     "build": "tsc",
     "postinstall": "pnpm run build"
